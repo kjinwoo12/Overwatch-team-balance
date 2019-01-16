@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>sinabro balance web</title>
+    <style>
+        .button {
+            padding: 10px;
+            margin: 10px 10px 10px 0px;
+        }
+
+        .member_form {
+            padding: 10px;
+            background-color: beige;
+            border: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="wrapper">
+            <div class="member_form">
+                <div>NAME&emsp;&emsp;: <input type="text" name="name" /></div>
+                <div>SCORE&emsp;&nbsp;&nbsp;:&nbsp; <input type="text" name="score" /></div>
+                <div>Position&emsp;:
+                    <label><input type="checkbox" name="chk_info" value="dps">딜러</label>
+                    <label><input type="checkbox" name="chk_info" value="tank">탱커</label>
+                    <label><input type="checkbox" name="chk_info" value="heal">힐러</label>
+                </div>
+            </div>
+        </div>
+        <button class="button" onclick="addMember()">+ Add Member</button>
+        <button class="button" onclick="calculateBalance()">Calculate!</button>
+    </div>
+</body>
+<script>
+    var wrapper = document.getElementById("wrapper");
+    var memberFormHtml = wrapper.innerHTML;
+    wrapper.removeChild(wrapper.getElementsByClassName("member_form")[0])
+
+    for (var i = 0; i < 12; i++) {
+        wrapper.innerHTML += memberFormHtml;
+    }
+    var formArr = wrapper.getElementsByClassName("member_form");
+    for (var i = 0; i < 12; i++) {
+        formArr[i].value = i+1;
+    }
+    
+    for (var i = 0; i < 12; i++) {
+        console.log(formArr[i].value);
+    }
+    
+    var userCount = 12;
+</script>
+<script>
+    function addMember() {
+        wrapper.innerHTML += memberFormHtml;
+        formArr = wrapper.getElementsByClassName("member_form");
+        
+        userCount++;
+        for(var i=1; i<=userCount; i++) {
+            formArr[userCount].value = i;   
+        }
+    }
+</script>
+<script>
+    function testLog() {
+        for(var i=0 ; i<userCount; i++) {
+            console.log(formArr[i].value);
+        }
+    }
+</script>
+</html>
