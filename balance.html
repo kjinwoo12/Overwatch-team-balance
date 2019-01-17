@@ -8,19 +8,25 @@
             margin: 10px 10px 10px 0px;
         }
 
-        .member_form {
+        .memberForm {
+            display: inline-block;
             padding: 10px;
             background-color: beige;
             border: 10px;
-            margin-bottom: 10px;
+            margin: 5px;
+            font-size: 15px;
+        }
+        
+        #memberWrapper {
+            font-size: 0px;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div id="wrapper">
-            <div class="member_form">
+        <div id="memberWrapper">
+            <div class="memberForm">
                 <div>NAME&emsp;&emsp;: <input type="text" name="name" /></div>
                 <div>SCORE&emsp;&nbsp;&nbsp;:&nbsp; <input type="text" name="score" /></div>
                 <div>Position&emsp;:
@@ -28,43 +34,74 @@
                     <label><input type="checkbox" name="chk_info" value="tank">탱커</label>
                     <label><input type="checkbox" name="chk_info" value="heal">힐러</label>
                 </div>
+                <button class="btnDelete" onclick="">Delete</button>
             </div>
         </div>
         <button class="button" onclick="addMember()">+ Add Member</button>
         <button class="button" onclick="calculateBalance()">Calculate!</button>
     </div>
 </body>
-<script>
-    var wrapper = document.getElementById("wrapper");
+<script> //util function
+    function updateForm() {
+        formArr = wrapper.getElementsByClassName("memberForm");
+        for (var i = 0; i < formArr.length; i++) {
+            var form = formArr[i];
+            form.value = Number.parseInt(i);
+            form.getElementsByClassName("btnDelete")[0].onclick = createBtnDeleteFunction(i)
+        }
+    }
+    
+    function createBtnDeleteFunction(index) {
+        return function(event) {
+            console.log(index);
+            deleteMember(index);
+        };
+    }
+</script>
+<script>//Global
+    var userCount = 12;
+    var wrapper = document.getElementById("memberWrapper");
+    var memberFormNodeArr = wrapper.getElementsByClassName("memberForm");
     var memberFormHtml = wrapper.innerHTML;
-    wrapper.removeChild(wrapper.getElementsByClassName("member_form")[0])
+    wrapper.removeChild(memberFormNodeArr[0])
 
     for (var i = 0; i < 12; i++) {
         wrapper.innerHTML += memberFormHtml;
     }
-    var formArr = wrapper.getElementsByClassName("member_form");
-    for (var i = 0; i < 12; i++) {
-        formArr[i].value = i+1;
-    }
+    updateForm();
     
-    for (var i = 0; i < 12; i++) {
-        console.log(formArr[i].value);
-    }
-    
-    var userCount = 12;
 </script>
-<script>
+<script> // onClickEvent
     function addMember() {
-        wrapper.innerHTML += memberFormHtml;
-        formArr = wrapper.getElementsByClassName("member_form");
-        
+        var newElement = document.createElement("div");
+        newElement.className = "memberForm";
+        newElement.innerHTML = 
+            '<div>NAME&emsp;&emsp;: <input type="text" name="name" /></div>' +
+            '<div>SCORE&emsp;&nbsp;&nbsp;:&nbsp; <input type="text" name="score" /></div>' +
+            '<div>Position&emsp;:' +
+            '<label><input type="checkbox" name="chk_info" value="dps">딜러</label>' +
+            '<label><input type="checkbox" name="chk_info" value="tank">탱커</label>' +
+            '<label><input type="checkbox" name="chk_info" value="heal">힐러</label>' +
+            '</div>' +
+            '<button class="btnDelete" onclick="">Delete</button>';
+        wrapper.appendChild(newElement);
+        formArr = wrapper.getElementsByClassName("memberForm");
         userCount++;
-        for(var i=1; i<=userCount; i++) {
-            formArr[userCount].value = i;   
-        }
+        updateForm();
+    }
+    
+    function deleteMember(index) {
+        var targetElement = wrapper.getElementsByClassName("memberForm")[index];
+        var parent = targetElement.parentElement;
+        parent.removeChild(targetElement);
+        userCount--;
+        updateForm();
+    }
+    
+    function calculateBalance() {
     }
 </script>
-<script>
+<script> // for debugging
     function testLog() {
         for(var i=0 ; i<userCount; i++) {
             console.log(formArr[i].value);
