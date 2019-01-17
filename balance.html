@@ -19,12 +19,16 @@
         
         #memberWrapper {
             font-size: 0px;
+            width: 800px;
+            background-color:aqua; 
         }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <button class="button" onclick="addMember()">+ Add Member</button>
+        <button class="button" onclick="calculateBalance()">Calculate!</button> 
         <div id="memberWrapper">
             <div class="memberForm">
                 <div>NAME&emsp;&emsp;: <input type="text" name="name" /></div>
@@ -37,68 +41,10 @@
                 <button class="btnDelete" onclick="">Delete</button>
             </div>
         </div>
-        <button class="button" onclick="addMember()">+ Add Member</button>
-        <button class="button" onclick="calculateBalance()">Calculate!</button>
     </div>
 </body>
-<script> //util function
-    function updateForm() {
-        formArr = wrapper.getElementsByClassName("memberForm");
-        for (var i = 0; i < formArr.length; i++) {
-            var form = formArr[i];
-            form.value = Number.parseInt(i);
-            form.getElementsByClassName("btnDelete")[0].onclick = createBtnDeleteFunction(i)
-        }
-    }
-    
-    function createBtnDeleteFunction(index) {
-        return function(event) {
-            console.log(index);
-            deleteMember(index);
-        };
-    }
-</script>
-<script>//Global
-    var userCount = 12;
-    var wrapper = document.getElementById("memberWrapper");
-    var memberFormNodeArr = wrapper.getElementsByClassName("memberForm");
-    var memberFormHtml = wrapper.innerHTML;
-    wrapper.removeChild(memberFormNodeArr[0])
-
-    for (var i = 0; i < 12; i++) {
-        wrapper.innerHTML += memberFormHtml;
-    }
-    updateForm();
-    
-</script>
-<script> // onClickEvent
-    function addMember() {
-        var newElement = document.createElement("div");
-        newElement.className = "memberForm";
-        newElement.innerHTML = 
-            '<div>NAME&emsp;&emsp;: <input type="text" name="name" /></div>' +
-            '<div>SCORE&emsp;&nbsp;&nbsp;:&nbsp; <input type="text" name="score" /></div>' +
-            '<div>Position&emsp;:' +
-            '<label><input type="checkbox" name="chk_info" value="dps">딜러</label>' +
-            '<label><input type="checkbox" name="chk_info" value="tank">탱커</label>' +
-            '<label><input type="checkbox" name="chk_info" value="heal">힐러</label>' +
-            '</div>' +
-            '<button class="btnDelete" onclick="">Delete</button>';
-        wrapper.appendChild(newElement);
-        formArr = wrapper.getElementsByClassName("memberForm");
-        userCount++;
-        updateForm();
-    }
-    
-    function deleteMember(index) {
-        var targetElement = wrapper.getElementsByClassName("memberForm")[index];
-        var parent = targetElement.parentElement;
-        parent.removeChild(targetElement);
-        userCount--;
-        updateForm();
-    }
-    
-    function calculateBalance() {
-    }
-</script>
+<script type="text/javascript" src="util.js"></script>
+<script type="text/javascript" src="global.js"></script>
+<script type="text/javascript" src="onClickEvent.js"></script>
+<script type="text/javascript" src="balanceCalculator.js"></script>
 </html>
