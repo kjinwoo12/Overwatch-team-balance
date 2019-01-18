@@ -20,23 +20,36 @@
         #memberWrapper {
             font-size: 0px;
             width: 800px;
-            background-color:aqua; 
+            background-color:#c1f0e0; 
         }
     </style>
 </head>
 
 <body>
+    <div>
+        <p>
+            - 읽어보기 -<br/>
+            안녕하세요. 시나브로 클랜 플래티아 팀 소속 요플레 입니다.<br/>
+            사설방 자동 팀 밸런스 추천 프로그램을 만들었어요. 도움이 되었으면 합니다.<br/>
+            <br/>
+            1. 아래 입력 칸에 참여자 정보를 입력합니다. 12명 이상을 입력하셔야 합니다.<br/>
+            2. 참여자가 6의 배수가 아닐 경우, 팀 배치가 안되는 사람이 있을 수 있습니다. 점수가 낮을수록 불이익이 발생합니다.<br/>
+            3. 항상 신청한 포지션으로 배치되는게 아닙니다. 점수가 높을수록 불이익이 발생합니다.<br/>
+            4. 항상 신청한 포지션으로 배치되는게 아닙니다. 포지션이 겹칠수록 불이익이 발생합니다.<br/>
+        </p>
+        <hr/>
+    </div>
     <div class="container">
         <button class="button" onclick="addMember()">+ Add Member</button>
-        <button class="button" onclick="calculateBalance()">Calculate!</button> 
+        <button class="button" onclick="calculateBalance()">Calculate!</button>
         <div id="memberWrapper">
             <div class="memberForm">
-                <div>NAME&emsp;&emsp;: <input type="text" name="name" /></div>
-                <div>SCORE&emsp;&nbsp;&nbsp;:&nbsp; <input type="text" name="score" /></div>
+                <div>NAME&emsp;&emsp;: <input type="text" name="name" class="name" value=""/></div>
+                <div>SCORE&emsp;&nbsp;&nbsp;:&nbsp; <input type="text" name="score" class="score" value=""/></div>
                 <div>Position&emsp;:
-                    <label><input type="checkbox" name="chk_info" value="dps">딜러</label>
-                    <label><input type="checkbox" name="chk_info" value="tank">탱커</label>
-                    <label><input type="checkbox" name="chk_info" value="heal">힐러</label>
+                    <label><input type="checkbox" name="chk_info" value="dps" class="isDPS">딜러</label>
+                    <label><input type="checkbox" name="chk_info" value="tank" class="isTank">탱커</label>
+                    <label><input type="checkbox" name="chk_info" value="heal" class="isHeal">힐러</label>
                 </div>
                 <button class="btnDelete" onclick="">Delete</button>
             </div>
@@ -47,4 +60,11 @@
 <script type="text/javascript" src="global.js"></script>
 <script type="text/javascript" src="onClickEvent.js"></script>
 <script type="text/javascript" src="balanceCalculator.js"></script>
+
+<script type="text/javascript"> //initialize
+    for (var i = 0; i < 12; i++) {
+        addMember();
+    }
+    updateForm();
+</script>
 </html>
