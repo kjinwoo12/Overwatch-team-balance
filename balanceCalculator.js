@@ -1,20 +1,32 @@
 function calculateBalance() {
-    var teamArr = createTeamArr(teamCount);
     var infoArr = parseUserInfoArr();
     for(var i=0; i<infoArr.length; i++) {
         infoArr[i].index = i;
     }
-    sortInfoArrForScoring(infoArr);
+    infoArr = sortInfoArrForScoring(infoArr);
+    
     
     var flexArr = parseFlexArr(infoArr);
     var multiArr = parseMultiArr(infoArr);
     var dpsArr = parseDPSArr(infoArr);
     var tankArr = parseTankArr(infoArr);
     var healArr = parseHealArr(infoArr);
-    
-    var teamCount = parseInt(infoArr.length/6);
-    
-    relocatePosition(infoArr, flexArr, multiArr, dpsArr, tankArr, healArr, teamCount);
+    console.log("flex : " + flexArr.length);
+    console.log("multi : " + multiArr.length);
+    console.log("dps : " + dpsArr.length);
+    console.log("tank : " + tankArr.length);
+    console.log("heal : " + healArr.length);
+    var relocatedInfoArr = relocatePosition(flexArr, multiArr, [
+        {arr:dpsArr, type:"dps"},
+        {arr:tankArr, type:"tank"}, 
+        {arr:healArr, type:"heal"}
+    ]);
+    console.log("");
+    console.log("========= re-position member ==========")
+    console.log(relocatedInfoArr);
+    var teamCount = Math.floor(relocatedInfoArr.length/6);
+    var teamArr = createTeamArr(teamCount);
+    pickMember(teamArr, dpsArr, tankArr, healArr);
 }
 
 function parseUserInfo(index) {
@@ -64,6 +76,7 @@ function parseFlexArr(infoArr) {
             arr.push(infoArr[i]);
         }
     }
+    return arr;
 }
 
 function parseMultiArr(infoArr) {
@@ -75,6 +88,7 @@ function parseMultiArr(infoArr) {
             arr.push(infoArr[i]);
         }
     }
+    return arr;
 }
 
 function parseDPSArr(infoArr) {
@@ -84,6 +98,7 @@ function parseDPSArr(infoArr) {
             arr.push(infoArr[i]);
         }
     }
+    return arr;
 }
 
 function parseTankArr(infoArr) {
@@ -93,6 +108,7 @@ function parseTankArr(infoArr) {
             arr.push(infoArr[i]);
         }
     }
+    return arr;
 }
 
 function parseHealArr(infoArr) {
@@ -102,6 +118,7 @@ function parseHealArr(infoArr) {
             arr.push(infoArr[i]);
         }
     }
+    return arr;
 }
 
 function createTeamArr(teamCount) {
@@ -117,9 +134,78 @@ function createTeamArr(teamCount) {
     return teamArr;
 }
 
-function relocatePosition(infoArr, flexArr, multiArr, dpsArr, tankArr, healArr, teamCount) {
-    var positionArrayArr = [dpsArr, tankArr, healArr];
+function relocatePosition(flexArr, multiArr, positionArrayArr) {
+    
     positionArrayArr.sort(function(a, b) {
-        return a.length - b.length;
+        return a.arr.length - b.arr.length;
     });
+    
+    if(multiArr.length!=0) {
+        for(var i=0; i<3; i++) {
+            for(var j=0; j<multiArr.length!=0; j++) {
+                if(positionArrayArr[i].type=="dps" && multiArr[j].isDPS) {
+                    positionArrayArr[i].arr.push(multiArr[j]);
+                    multiArr.splice(0, 1); //remove index 0
+                    return relocatePosition(flexArr, multiArr, positionArrayArr);
+                } else if(positionArrayArr[i].type=="tank" && multiArr[j].isTank) {
+                    positionArrayArr[i].arr.push(multiArr[j]);
+                    multiArr.splice(0, 1); //remove index 0
+                    return relocatePosition(flexArr, multiArr, positionArrayArr);
+                } else if(positionArrayArr[i].type=="heal" && multiArr[j].isHeal) {
+                    positionArrayArr[i].arr.push(multiArr[j]);
+                    multiArr.splice(0, 1); //remove index 0
+                    return relocatePosition(flexArr, multiArr, positionArrayArr);
+                }
+            }
+        }
+        return null;
+    } else if(flexArr.length!=0) {
+        positionArrayArr[0].arr.push(flexArr[0]);
+        multiArr.splice(0, 1);
+        return relocatePosition(flexArr, multiArr, positionArrayArr);
+    } else {
+        var positionlengthAverage = Math.ceil((positionArrayArr[0].arr.length + positionArrayArr[1].arr.length + positionArrayArr[2].arr.length)/3);
+        
+        var switchTargetArr = [];
+        for(var i=1; i<3; i++) {
+            sortInfoArrForScoring(positionArrayArr[i].arr);
+            while(positionArrayArr[i].arr.length > positionlengthAverage) {
+                var member = positionArrayArr[i].arr[0];
+                switchTargetArr.push(member);
+                positionArrayArr[i].arr.splice(0, 1);
+            }
+        }
+        
+        for(var i=0; i<2; i++) {
+            while(positionArrayArr[i].arr.length < positionlengthAverage && switchTargetArr.length!=0) {
+                var member = switchTargetArr[0];
+                switchTargetArr.splice(0, 1);
+                if(positionArrayArr[i].type=="dps" && !member.isDPS ||
+                   positionArrayArr[i].type=="tank" && !member.isTank ||
+                   positionArrayArr[i].type=="heal" && !member.isHeal) {
+                    var logMsg = member.name + " : ";
+                    if(member.isDPS) logMsg += "DPS -> ";
+                    else if(member.isHeal) logMsg += "Heal ->";
+                    else if(member.isTank) logMsg += "Tank ->";
+                    member.score -= 250;
+                    if(positionArrayArr[i].type=="dps") {
+                        member.isDPS = true;
+                        logMsg += "DPS";
+                    } else if(positionArrayArr[i].type=="tank") {
+                        member.isTank = true;
+                        logMsg += "Tank";
+                    } else if(positionArrayArr[i].type=="heal") {
+                        member.isHeal = true;
+                        logMsg += "Heal";
+                    }
+                    console.log(logMsg);
+                }
+                positionArrayArr[i].arr.push(member);
+            }
+            sortInfoArrForScoring(positionArrayArr[i].arr);
+        }
+        var returnArr = positionArrayArr[0].arr.concat(positionArrayArr[1].arr, positionArrayArr[2].arr);
+        sortInfoArrForScoring(returnArr);
+        return returnArr;
+    }
 }
