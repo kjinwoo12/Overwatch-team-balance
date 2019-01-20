@@ -86,3 +86,11 @@ function deleteMember(index) {
     parent.removeChild(targetElement);
     updateForm();
 }
+
+function averageScore(members) {
+    var n = 0;
+    for(var i=0; i<members.length; i++) {
+        n+=members[i].score;
+    }
+    return n/members.length;
+}
