@@ -3,7 +3,7 @@ function calculateBalance() {
     for(var i=0; i<infoArr.length; i++) {
         infoArr[i].index = i;
     }
-    infoArr = sortInfoArrForScoring(infoArr);
+    sortInfoArrForScoring(infoArr);
     
     
     var flexArr = parseFlexArr(infoArr);
@@ -26,7 +26,11 @@ function calculateBalance() {
     console.log(relocatedInfoArr);
     var teamCount = Math.floor(relocatedInfoArr.length/6);
     var teamArr = createTeamArr(teamCount);
-    pickMember(teamArr, dpsArr, tankArr, healArr);
+    
+    setRoster(teamArr, dpsArr, tankArr, healArr);
+    console.log("");
+    console.log("========= Team Roster ==========")
+    console.log(teamArr);
 }
 
 function parseUserInfo(index) {
@@ -123,12 +127,12 @@ function parseHealArr(infoArr) {
 
 function createTeamArr(teamCount) {
     var teamArr = [];
+    
     for(var i=0; i<teamCount; i++) {
         teamArr.push({
             name: "team"+(i+1),
-            dps: [],
-            tank: [],
-            heal: []
+            members: [],
+            average: null
         });
     }
     return teamArr;
@@ -207,5 +211,49 @@ function relocatePosition(flexArr, multiArr, positionArrayArr) {
         var returnArr = positionArrayArr[0].arr.concat(positionArrayArr[1].arr, positionArrayArr[2].arr);
         sortInfoArrForScoring(returnArr);
         return returnArr;
+    }
+}
+
+function setRoster(teamArr, dpsArr, tankArr, healArr) {
+    pickMember(teamArr, dpsArr);
+    for(var i=0; i<teamArr.length; i++) {
+        teamArr[i].average = averageScore(teamArr[i].members);
+    }
+    teamArr.sort(function(a, b) {
+        return a.average - b.average;
+    });
+    
+    pickMember(teamArr, tankArr);
+    for(var i=0; i<teamArr.length; i++) {
+        teamArr[i].average = averageScore(teamArr[i].members);
+    }
+    teamArr.sort(function(a, b) {
+        return a.average - b.average;
+    });
+    
+    pickMember(teamArr, healArr);
+    for(var i=0; i<teamArr.length; i++) {
+        teamArr[i].average = averageScore(teamArr[i].members);
+        sortInfoArrForScoring(teamArr[i].members);
+    }
+}
+
+function pickMember(teamArr, memberArr) {
+    var cpyMemberArr = JSON.parse(JSON.stringify(memberArr));
+    cpyMemberArr.sort(function(a, b) {
+        a.index - b.index;
+    });
+    var teamLength = cpyMemberArr.length;
+    var spareMemberCount = length%teamLength;
+    cpyMemberArr.splice(cpyMemberArr.length-1-spareMemberCount, spareMemberCount);
+    sortInfoArrForScoring(cpyMemberArr);
+    
+    for(var i=0; i<teamArr.length; i++) {
+        teamArr[i].members.push(cpyMemberArr[0]);
+        cpyMemberArr.splice(0, 1);
+    }
+    for(var i=teamArr.length-1; i>=0; i--) {
+        teamArr[i].members.push(cpyMemberArr[0]);
+        cpyMemberArr.splice(0, 1);
     }
 }
