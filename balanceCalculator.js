@@ -226,9 +226,12 @@ function setRoster(teamArr, dpsArr, tankArr, healArr) {
     
     pickMember(teamArr, healArr);
     for(var i=0; i<teamArr.length; i++) {
-        teamArr[i].average = averageScore(teamArr[i].members);
+        teamArr[i].average = Math.round(averageScore(teamArr[i].members));
         sortInfoArrForScoring(teamArr[i].members);
     }
+    teamArr.sort(function(a, b) {
+        return a.average - b.average;
+    });
 }
 
 function pickMember(teamArr, memberArr) {

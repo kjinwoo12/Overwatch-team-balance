@@ -110,7 +110,7 @@ function addTeam(team) {
     form.className = "resultForm";
     form.innerHTML = resultFormInnerHtml;
     resultDisplay.appendChild(form);
-    form.getElementsByClassName("teamName")[0].innerHTML = team.name;
+    form.getElementsByClassName("teamName")[0].innerHTML = team.name + " ( average-score : "+team.average+")";
     var divMembers = form.getElementsByClassName("members")[0];
     for(var i=0; i<6; i++) {
         divMembers.innerHTML += 
