@@ -72,11 +72,17 @@ function setRandomData(element) {
     element.getElementsByClassName("score")[0].value = 2600 + parseInt(Math.random()*1900);
     var random = parseInt(Math.random()*3) + 1;
     if(random==1) {
-        element.getElementsByClassName("isDPS")[0].setAttribute("checked", true);
+        element.getElementsByClassName("isDPS")[0].checked = true;
+        element.getElementsByClassName("isTank")[0].checked = false;
+        element.getElementsByClassName("isHeal")[0].checked = false;
     } else if(random==2) {
-        element.getElementsByClassName("isTank")[0].setAttribute("checked", true);
+        element.getElementsByClassName("isDPS")[0].checked = false;
+        element.getElementsByClassName("isTank")[0].checked = true;
+        element.getElementsByClassName("isHeal")[0].checked = false;
     } else {
-        element.getElementsByClassName("isHeal")[0].setAttribute("checked", true);
+        element.getElementsByClassName("isDPS")[0].checked = false;
+        element.getElementsByClassName("isTank")[0].checked = false;
+        element.getElementsByClassName("isHeal")[0].checked = true;
     }
 }
 

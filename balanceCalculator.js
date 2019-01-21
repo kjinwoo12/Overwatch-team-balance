@@ -5,7 +5,6 @@ function calculateBalance() {
     }
     sortInfoArrForScoring(infoArr);
     
-    
     var flexArr = parseFlexArr(infoArr);
     var multiArr = parseMultiArr(infoArr);
     var dpsArr = parseDPSArr(infoArr);
@@ -28,6 +27,9 @@ function calculateBalance() {
     var teamArr = createTeamArr(teamCount);
     
     setRoster(teamArr, dpsArr, tankArr, healArr);
+    for(var i=0; i<teamArr.length; i++) {
+        teamArr[i].name += (i+1);
+    }
     console.log("");
     console.log("========= Team Roster ==========")
     console.log(teamArr);
@@ -37,16 +39,16 @@ function parseUserInfo(index) {
     var form = formArr[index];
     var name = form.getElementsByClassName("name")[0].value;
     var score = parseInt(form.getElementsByClassName("score")[0].value);
-    var isDPS = form.getElementsByClassName("isDPS")[0].getAttribute("checked");
-    var isTank = form.getElementsByClassName("isTank")[0].getAttribute("checked");
-    var isHeal = form.getElementsByClassName("isHeal")[0].getAttribute("checked");
+    var isDPS = form.getElementsByClassName("isDPS")[0].checked;
+    var isTank = form.getElementsByClassName("isTank")[0].checked;
+    var isHeal = form.getElementsByClassName("isHeal")[0].checked;
     
     return {
         name: (name==null)?"":name,
         score: (score==null)?0:score,
-        isDPS: (isDPS==null)?false:true,
-        isTank: (isTank==null)?false:true,
-        isHeal: (isHeal==null)?false:true,
+        isDPS: (isDPS==null)?false:isDPS,
+        isTank: (isTank==null)?false:isTank,
+        isHeal: (isHeal==null)?false:isHeal,
         index: null
     };
 }
@@ -54,6 +56,7 @@ function parseUserInfo(index) {
 function parseUserInfoArr() {
     var infoArr = [];
     var memberCount = getMemberCount();
+    console.log("memberCount : " + memberCount);
     for(var i=0; i<memberCount; i++) {
         var info = parseUserInfo(i);
         if(info==null) {
@@ -130,7 +133,7 @@ function createTeamArr(teamCount) {
     
     for(var i=0; i<teamCount; i++) {
         teamArr.push({
-            name: "team"+(i+1),
+            name: "team",
             members: [],
             average: null
         });
@@ -139,7 +142,6 @@ function createTeamArr(teamCount) {
 }
 
 function relocatePosition(flexArr, multiArr, positionArrayArr) {
-    
     positionArrayArr.sort(function(a, b) {
         return a.arr.length - b.arr.length;
     });
