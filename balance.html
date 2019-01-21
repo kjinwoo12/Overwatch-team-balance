@@ -3,6 +3,11 @@
     <head>
     <title>sinabro balance web</title>
     <style>
+        .container {
+            background-color: antiquewhite;
+            width: 1920px;
+        }
+        
         .button {
             padding: 10px;
             margin: 10px 10px 10px 0px;
@@ -12,7 +17,6 @@
             display: inline-block;
             padding: 10px;
             background-color: beige;
-            border: 10px;
             margin: 5px 5px 0px 0px;
             font-size: 15px;
         }
@@ -24,9 +28,38 @@
             padding: 0px 0px 5px 5px;
         }
         
-        #result, .container {
+        #resultDisplay, #memberWrapper {
             vertical-align: top;
             display: inline-block;
+        }
+        
+        #resultDisplay {
+            font-size: 0px;
+            width: 900px;
+            padding: 0px, 0px, 5px, 5px;
+        }
+        
+        .resultForm {
+            text-align: center;
+            display: inline-block;
+            width: 400px;
+            font-size: 15px;
+            margin: 5px 5px 5px 5px;
+            padding: 10px;
+            background-color: beige;
+            border-style: solid;
+            border-width: 1px;
+            border-color: black;
+            border-radius: 5px;
+        }
+        
+        .resultForm > .members > div {
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 3px;
+            margin: 3px;
+            padding: 5px;
+            background-color: #ffffff;
         }
     </style>
 </head>
@@ -46,8 +79,10 @@
         <hr/>
     </div>
     <div class="container">
-        <button class="button" onclick="addMember()">+ Add Member</button>
-        <button class="button" onclick="calculateBalance()">Calculate!</button>
+        <div>
+            <button class="button" onclick="addMember()">+ Add Member</button>
+            <button class="button" onclick="onClickCalculate()">Calculate!</button>
+        </div>
         <div id="memberWrapper">
             <div class="memberForm">
                 <div>NAME&emsp;&emsp;: <input type="text" name="name" class="name" value=""/></div>
@@ -60,12 +95,11 @@
                 <button class="btnDelete" onclick="">Delete</button>
             </div>
         </div>
-    </div>
-    <div id="result">
-        <div class="teamResultForm">
-            <div>Team : <p class=""></p></div>
-            <div>======= Roster =======</div>
-            <div class="members">
+        <div id="resultDisplay">
+            <div class="resultForm">
+                <div><span class="teamName"></span></div>
+                <div class="members">
+                </div>
             </div>
         </div>
     </div>

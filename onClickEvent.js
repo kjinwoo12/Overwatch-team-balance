@@ -7,5 +7,7 @@ function onClickDelete() {
 }
 
 function onClickCalculate() {
-    calculateBalance();
+    var teamArr = calculateBalance();
+    console.log(teamArr);
+    displayTeamRoster(teamArr);
 }

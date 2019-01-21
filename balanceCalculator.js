@@ -10,19 +10,11 @@ function calculateBalance() {
     var dpsArr = parseDPSArr(infoArr);
     var tankArr = parseTankArr(infoArr);
     var healArr = parseHealArr(infoArr);
-    console.log("flex : " + flexArr.length);
-    console.log("multi : " + multiArr.length);
-    console.log("dps : " + dpsArr.length);
-    console.log("tank : " + tankArr.length);
-    console.log("heal : " + healArr.length);
     var relocatedInfoArr = relocatePosition(flexArr, multiArr, [
         {arr:dpsArr, type:"dps"},
         {arr:tankArr, type:"tank"}, 
         {arr:healArr, type:"heal"}
     ]);
-    console.log("");
-    console.log("========= re-position member ==========")
-    console.log(relocatedInfoArr);
     var teamCount = Math.floor(relocatedInfoArr.length/6);
     var teamArr = createTeamArr(teamCount);
     
@@ -30,9 +22,15 @@ function calculateBalance() {
     for(var i=0; i<teamArr.length; i++) {
         teamArr[i].name += (i+1);
     }
-    console.log("");
-    console.log("========= Team Roster ==========")
-    console.log(teamArr);
+    
+    return teamArr;
+}
+
+function displayTeamRoster(teamArr) {
+    initTeamDisplay();
+    for(var i=0; i<teamArr.length; i++) {
+        addTeam(teamArr[i]);
+    }
 }
 
 function parseUserInfo(index) {
@@ -49,14 +47,15 @@ function parseUserInfo(index) {
         isDPS: (isDPS==null)?false:isDPS,
         isTank: (isTank==null)?false:isTank,
         isHeal: (isHeal==null)?false:isHeal,
-        index: null
+        index: null,
+        position: null,
     };
 }
 
 function parseUserInfoArr() {
     var infoArr = [];
     var memberCount = getMemberCount();
-    console.log("memberCount : " + memberCount);
+    memberCount -= memberCount%6;
     for(var i=0; i<memberCount; i++) {
         var info = parseUserInfo(i);
         if(info==null) {
@@ -167,7 +166,7 @@ function relocatePosition(flexArr, multiArr, positionArrayArr) {
         return null;
     } else if(flexArr.length!=0) {
         positionArrayArr[0].arr.push(flexArr[0]);
-        multiArr.splice(0, 1);
+        flexArr.splice(0, 1);
         return relocatePosition(flexArr, multiArr, positionArrayArr);
     } else {
         var positionlengthAverage = Math.ceil((positionArrayArr[0].arr.length + positionArrayArr[1].arr.length + positionArrayArr[2].arr.length)/3);
@@ -189,27 +188,19 @@ function relocatePosition(flexArr, multiArr, positionArrayArr) {
                 if(positionArrayArr[i].type=="dps" && !member.isDPS ||
                    positionArrayArr[i].type=="tank" && !member.isTank ||
                    positionArrayArr[i].type=="heal" && !member.isHeal) {
-                    var logMsg = member.name + " : ";
-                    if(member.isDPS) logMsg += "DPS -> ";
-                    else if(member.isHeal) logMsg += "Heal ->";
-                    else if(member.isTank) logMsg += "Tank ->";
                     member.score -= 250;
-                    if(positionArrayArr[i].type=="dps") {
-                        member.isDPS = true;
-                        logMsg += "DPS";
-                    } else if(positionArrayArr[i].type=="tank") {
-                        member.isTank = true;
-                        logMsg += "Tank";
-                    } else if(positionArrayArr[i].type=="heal") {
-                        member.isHeal = true;
-                        logMsg += "Heal";
-                    }
-                    console.log(logMsg);
                 }
                 positionArrayArr[i].arr.push(member);
             }
             sortInfoArrForScoring(positionArrayArr[i].arr);
         }
+        
+        for(var i=0; i<3; i++) {
+            for(var j=0; j<positionArrayArr[i].arr.length; j++) {
+                positionArrayArr[i].arr[j].position = positionArrayArr[i].type;
+            }
+        }
+        
         var returnArr = positionArrayArr[0].arr.concat(positionArrayArr[1].arr, positionArrayArr[2].arr);
         sortInfoArrForScoring(returnArr);
         return returnArr;

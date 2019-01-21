@@ -100,3 +100,20 @@ function averageScore(members) {
     }
     return n/members.length;
 }
+
+function initTeamDisplay() {
+    resultDisplay.innerHTML = "";
+}
+
+function addTeam(team) {
+    var form = document.createElement("div");
+    form.className = "resultForm";
+    form.innerHTML = resultFormInnerHtml;
+    resultDisplay.appendChild(form);
+    form.getElementsByClassName("teamName")[0].innerHTML = team.name;
+    var divMembers = form.getElementsByClassName("members")[0];
+    for(var i=0; i<6; i++) {
+        divMembers.innerHTML += 
+            "<div>" + team.members[i].position + "<br/>" + team.members[i].name + "</div>";
+    }
+}
