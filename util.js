@@ -70,19 +70,49 @@ function setRandomData(element) {
     element.getElementsByClassName("name")[0].value = tempNameArr[parseInt(Math.random()*tempNameArr.length)]
         +"("+getMemberCount()+")";
     element.getElementsByClassName("score")[0].value = 2600 + parseInt(Math.random()*1900);
-    var random = parseInt(Math.random()*3) + 1;
+    var random = parseInt(Math.random()*6) + 1;
     if(random==1) {
         element.getElementsByClassName("isDPS")[0].checked = true;
         element.getElementsByClassName("isTank")[0].checked = false;
         element.getElementsByClassName("isHeal")[0].checked = false;
+        element.getElementsByClassName("issDPS")[0].checked = false;
+        element.getElementsByClassName("issTank")[0].checked = false;
+        element.getElementsByClassName("issHeal")[0].checked = false;
     } else if(random==2) {
         element.getElementsByClassName("isDPS")[0].checked = false;
         element.getElementsByClassName("isTank")[0].checked = true;
         element.getElementsByClassName("isHeal")[0].checked = false;
-    } else {
+        element.getElementsByClassName("issDPS")[0].checked = false;
+        element.getElementsByClassName("issTank")[0].checked = false;
+        element.getElementsByClassName("issHeal")[0].checked = false;
+    } else if(random==3) {
         element.getElementsByClassName("isDPS")[0].checked = false;
         element.getElementsByClassName("isTank")[0].checked = false;
         element.getElementsByClassName("isHeal")[0].checked = true;
+        element.getElementsByClassName("issDPS")[0].checked = false;
+        element.getElementsByClassName("issTank")[0].checked = false;
+        element.getElementsByClassName("issHeal")[0].checked = false;
+    } else if(random==4) {
+        element.getElementsByClassName("isDPS")[0].checked = false;
+        element.getElementsByClassName("isTank")[0].checked = false;
+        element.getElementsByClassName("isHeal")[0].checked = false;
+        element.getElementsByClassName("issDPS")[0].checked = true;
+        element.getElementsByClassName("issTank")[0].checked = false;
+        element.getElementsByClassName("issHeal")[0].checked = false;
+    } else if(random==5) {
+        element.getElementsByClassName("isDPS")[0].checked = false;
+        element.getElementsByClassName("isTank")[0].checked = false;
+        element.getElementsByClassName("isHeal")[0].checked = false;
+        element.getElementsByClassName("issDPS")[0].checked = false;
+        element.getElementsByClassName("issTank")[0].checked = true;
+        element.getElementsByClassName("issHeal")[0].checked = false;
+    } else {
+        element.getElementsByClassName("isDPS")[0].checked = false;
+        element.getElementsByClassName("isTank")[0].checked = false;
+        element.getElementsByClassName("isHeal")[0].checked = false;
+        element.getElementsByClassName("issDPS")[0].checked = false;
+        element.getElementsByClassName("issTank")[0].checked = false;
+        element.getElementsByClassName("issHeal")[0].checked = true;
     }
 }
 

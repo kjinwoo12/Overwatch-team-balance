@@ -80,19 +80,23 @@
     </div>
     <div class="container">
         <div>
-            <button class="button" onclick="addMember()">+ Add Member</button>
-            <button class="button" onclick="onClickCalculate()">Calculate!</button>
+            <button class="button" onclick="addMember()">+ 맴버 추가</button>
+            <button class="button" onclick="onClickCalculate()">계산하기</button>
         </div>
         <div id="memberWrapper">
             <div class="memberForm">
-                <div>NAME&emsp;&emsp;: <input type="text" name="name" class="name" value=""/></div>
-                <div>SCORE&emsp;&nbsp;&nbsp;:&nbsp;<input type="text" name="score" class="score" value=""/></div>
-                <div>Position&emsp;:
+                <div>이름&emsp;&emsp;: <input type="text" name="name" class="name" value=""/></div>
+                <div>점수 &emsp;&nbsp;&nbsp;:&nbsp;<input type="text" name="score" class="score" value=""/></div>
+                <div>포지션&emsp;:
                     <label><input type="checkbox" name="chk_info" value="dps" class="isDPS">딜러</label>
                     <label><input type="checkbox" name="chk_info" value="tank" class="isTank">탱커</label>
                     <label><input type="checkbox" name="chk_info" value="heal" class="isHeal">힐러</label>
+                    <br/>&emsp;&emsp;&emsp;&emsp;
+                    <label><input type="checkbox" name="chk_info" value="sdps" class="issDPS">섭딜</label>
+                    <label><input type="checkbox" name="chk_info" value="stank" class="issTank">섭탱</label>
+                    <label><input type="checkbox" name="chk_info" value="sheal" class="issHeal">섭힐</label>
                 </div>
-                <button class="btnDelete" onclick="">Delete</button>
+                <button class="btnDelete" onclick="">삭제</button>
             </div>
         </div>
         <div id="resultDisplay">
